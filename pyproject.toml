@@ -1,0 +1,19 @@
+[project]
+name = "ffpopen"
+description = "Link opener for Firefox multi-profile users"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+]
+
+[project.scripts]
+ffp-open = "ffpopen:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "ffpopen",
+]

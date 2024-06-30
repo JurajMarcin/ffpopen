@@ -1,0 +1,22 @@
+[Desktop Entry]
+Version=1.0
+Name=Firefox Profile Open
+Exec=ffp-open %u
+Icon=firefox
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Network;WebBrowser;
+Keywords=web;browser;internet;
+Actions=new-window;new-private-window;
+MimeType=x-scheme-handler/unknown;x-scheme-handler/about;x-scheme-handler/https;x-scheme-handler/http;text/html;
+
+X-Desktop-File-Install-Version=0.26
+
+[Desktop Action new-window]
+Name=Open a New Window
+Exec=ffp-open --new-window %u
+
+[Desktop Action new-private-window]
+Name=Open a New Private Window
+Exec=ffp-open --private-window %u
