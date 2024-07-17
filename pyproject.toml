@@ -7,7 +7,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ffp-open = "ffpopen:main"
+ffpopen = "ffpopen:main"
 
 [build-system]
 requires = ["setuptools"]

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Name=Firefox Profile Open
-Exec=ffp-open %u
+Exec=ffpopen %u
 Icon=firefox
 Terminal=false
 Type=Application
@@ -15,8 +15,8 @@ X-Desktop-File-Install-Version=0.26
 
 [Desktop Action new-window]
 Name=Open a New Window
-Exec=ffp-open --new-window %u
+Exec=ffpopen --new-window %u
 
 [Desktop Action new-private-window]
 Name=Open a New Private Window
-Exec=ffp-open --private-window %u
+Exec=ffpopen --private-window %u
