@@ -1,8 +1,8 @@
-# ffp-open
+# ffpopen
 
 Open links using a selected Firefox Profile.
 
-`ffp-open LINK` parses available Firefox profiles from
+`ffpopen LINK` parses available Firefox profiles from
 `~/.mozilla/firefox/profiles.ini` a lets the user choose which profile they
 want to open `LINK` with.
 
