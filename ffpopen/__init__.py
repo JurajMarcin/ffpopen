@@ -79,7 +79,8 @@ def main() -> None:
         profile.open(argv[1:])
     except StopIteration:
         root = Tk(className="ffpopen")
-        root.attributes("-topmost", 1)
+        root.attributes("-topmost", True)
+        root.attributes("-type", "utility")
         for profile in profiles:
             def opener(profile: Profile = profile):
                 root.destroy()
