@@ -4,7 +4,6 @@ description = "Link opener for Firefox multi-profile users"
 version = "1.1.0"
 requires-python = ">=3.11"
 dependencies = [
-    "tkinter"
 ]
 
 [project.scripts]
