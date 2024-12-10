@@ -7,6 +7,7 @@ from subprocess import run
 from sys import argv
 from tkinter import Button, Tk
 from tomllib import loads as toml_loads
+from typing import Any
 
 
 PROFILES_PATH = (
@@ -40,6 +41,9 @@ class Profile:
         return link is not None and any(
             search(link_re, link) is not None for link_re in self.links
         )
+
+    def keys(self, used: set[str] | dict[str, Any]) -> str:
+        return next(c for c in self.name if c not in used and c.isalnum())
 
     @staticmethod
     def _load_system() -> list["Profile"]:
@@ -79,19 +83,40 @@ class Profile:
         return list(merged.values())
 
 
+def get_profile_keys(profiles: list[Profile]) -> dict[str, Profile]:
+    keys: dict[str, Profile] = {}
+    while len(keys) != len(profiles):
+        profile = next(profile for profile in profiles if profile not in keys.values())
+        try:
+            keys[profile.keys(keys)] = profile
+        except StopIteration:
+            keys = {profile.keys({}): profile}
+    return keys
+
+
 def main() -> None:
     link = argv[-1] if len(argv) > 1 else None
-    profiles = Profile.load()
+    profiles = get_profile_keys(Profile.load())
     try:
-        profile = next(profile for profile in profiles if profile.match(link))
+        profile = next(
+            profile for _, profile in profiles.items() if profile.match(link)
+        )
         profile.open(argv[1:])
     except StopIteration:
         root = Tk(className="ffpopen")
         root.attributes("-topmost", True)
         root.attributes("-type", "utility")
-        for profile in profiles:
-            def opener(profile: Profile = profile):
-                root.destroy()
-                profile.open(argv[1:])
-            Button(text=f"{profile.name}{' (default)' if profile.default else ''}", command=opener, width=20).pack(fill="x")
+        root.bind_all("<Escape>", lambda _: root.destroy())
+
+        def opener(profile: Profile):
+            root.destroy()
+            profile.open(argv[1:])
+
+        for key, profile in profiles.items():
+            root.bind_all(key, lambda _, p=profile: opener(p))
+            Button(
+                text=f"{profile.name}{' (default)' if profile.default else ''} [{key}]",
+                command=lambda p=profile: opener(p),
+                width=20,
+            ).pack(fill="x")
         root.wait_window()
