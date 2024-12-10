@@ -34,7 +34,7 @@ class Profile:
     def open(self, args: list[str]) -> None:
         args = ["firefox", *([] if self.default else ["-P", self.name])] + args
         print(args)
-        run(args)
+        run(args, check=True)
 
     def match(self, link: str | None) -> bool:
         return link is not None and any(
