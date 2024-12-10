@@ -10,12 +10,18 @@ from tomllib import loads as toml_loads
 
 
 PROFILES_PATH = (
-    Path(environ["FFPOPEN_PROFILES"]) \
-        if "FFPOPEN_PROFILES" in environ else \
-    Path(environ["XDG_CONFIG_HOME"], "ffpopen.toml") \
-        if "XDG_CONFIG_HOME" in environ else \
-    Path("~/.config/ffpopen.toml")
-).expanduser().resolve()
+    (
+        Path(environ["FFPOPEN_PROFILES"])
+        if "FFPOPEN_PROFILES" in environ
+        else (
+            Path(environ["XDG_CONFIG_HOME"], "ffpopen.toml")
+            if "XDG_CONFIG_HOME" in environ
+            else Path("~/.config/ffpopen.toml")
+        )
+    )
+    .expanduser()
+    .resolve()
+)
 
 
 @dataclass
@@ -31,7 +37,9 @@ class Profile:
         run(args)
 
     def match(self, link: str | None) -> bool:
-        return link is not None and any(search(link_re, link) is not None for link_re in self.links) 
+        return link is not None and any(
+            search(link_re, link) is not None for link_re in self.links
+        )
 
     @staticmethod
     def _load_system() -> list["Profile"]:
@@ -51,7 +59,7 @@ class Profile:
     def _load_custom() -> list["Profile"]:
         try:
             cfg = toml_loads(PROFILES_PATH.read_text())
-            return list(map(lambda pd: Profile(**pd), cfg['profile']))
+            return list(map(lambda pd: Profile(**pd), cfg["profile"]))
         except FileNotFoundError:
             return []
 
