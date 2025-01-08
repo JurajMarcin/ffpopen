@@ -62,7 +62,7 @@ class Profile:
     @staticmethod
     def _load_custom() -> list["Profile"]:
         try:
-            cfg = toml_loads(PROFILES_PATH.read_text())
+            cfg = toml_loads(PROFILES_PATH.read_text(encoding="locale"))
             return list(map(lambda pd: Profile(**pd), cfg["profile"]))
         except FileNotFoundError:
             return []
@@ -73,7 +73,6 @@ class Profile:
         for profile in Profile._load_system():
             profile.active = True
             merged[profile.name] = profile
-            merged[profile.name]
         for profile in Profile._load_custom():
             if profile.name in merged:
                 merged[profile.name].links.extend(profile.links)
