@@ -2,25 +2,32 @@
 
 Open links using a selected Firefox Profile.
 
-`ffpopen LINK` parses available Firefox profiles from
-`~/.mozilla/firefox/profiles.ini` a lets the user choose which profile they
-want to open `LINK` with.
+`ffpopen [ARGS ...]` parses available Firefox profiles from
+`~/.mozilla/firefox/profiles.ini` a lets you choose which Firefox profile you
+want to use. `ffpopen` then launches Firefox with
+`firefox -P <profile> [ARGS ...]`.
+
+`ffpopen` provides a `.desktop` file which you can select as your default
+browser using XDG/DM Settings/...
 
 ## Configuration
 
-Configuration is loaded from `$FFPOPEN_PROFILES` or
-`$XDG_CONFIG_HOME/ffpopen.toml` or `~/.config/ffpopen.toml`.
+Configuration is loaded from one of the following paths (after first success,
+the rest is ignored):
+- `$FFPOPEN_PROFILES`
+- `$XDG_CONFIG_HOME/ffpopen.toml`
+- `~/.config/ffpopen.toml`.
 
 Profiles can be assigned regex expressions, matching links are automatically
-opened with that profile. Links are matched using Python `re.search()`, you can
-use `^` and `$` to match the whole link only.
+opened with that profile. Links are matched using Python's `re.search()`, you can
+use `^` and `$` to match the start or end of the URL
 
 ```toml
 [[profile]]
-name = "Personal"
-links = ['discord\.com']
+name = "personal"
+links = ['local\.home']
 
 [[profile]]
-name = "default-release"
+name = "work"
 links = ['gitlab\.com']
 ```
