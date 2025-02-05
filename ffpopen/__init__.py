@@ -106,6 +106,7 @@ def main() -> None:
         root.attributes("-topmost", True)
         root.attributes("-type", "utility")
         root.bind_all("<Escape>", lambda _: root.destroy())
+        root.eval('tk::PlaceWindow . center')
 
         def opener(profile: Profile):
             root.destroy()
