@@ -43,7 +43,7 @@ class Profile:
         )
 
     def keys(self, used: set[str] | dict[str, Any]) -> str:
-        return next(c for c in self.name if c not in used and c.isalnum())
+        return next(c for c in self.name.lower() if c not in used and c.isalnum())
 
     @staticmethod
     def _load_system() -> list["Profile"]:

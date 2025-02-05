@@ -10,6 +10,18 @@ want to use. `ffpopen` then launches Firefox with
 `ffpopen` provides a `.desktop` file which you can select as your default
 browser using XDG/DM Settings/...
 
+## Installing
+
+### Fedora
+
+On Fedora ffpopen can be installed from my COPR repo:
+[https://copr.fedorainfracloud.org/coprs/jmarcin/ffpopen/](https://copr.fedorainfracloud.org/coprs/jmarcin/ffpopen/)
+
+```sh
+dnf copr enable jmarcin/ffpopen
+dnf install ffpopen
+```
+
 ## Configuration
 
 Configuration is loaded from one of the following paths (after first success,
