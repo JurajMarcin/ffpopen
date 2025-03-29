@@ -5,10 +5,10 @@ from pathlib import Path
 from re import search
 from subprocess import run
 from sys import argv
-from tkinter import Button, Tk
-from tomllib import loads as toml_loads
+from tkinter import BooleanVar, Button, Checkbutton, Tk
 from typing import Any
 
+from tomllib import loads as toml_loads
 
 PROFILES_PATH = (
     (
@@ -32,8 +32,13 @@ class Profile:
     default: bool = False
     active: bool = False
 
-    def open(self, args: list[str]) -> None:
-        args = ["firefox", *([] if self.default else ["-P", self.name])] + args
+    def open(self, args: list[str], private: bool = False) -> None:
+        args = [
+            "firefox",
+            *([] if self.default else ["-P", self.name]),
+            *(["--private-window"] if private else []),
+            *args,
+        ]
         print(args)
         run(args, check=True)
 
@@ -43,7 +48,7 @@ class Profile:
         )
 
     def keys(self, used: set[str] | dict[str, Any]) -> str:
-        return next(c for c in self.name.lower() if c not in used and c.isalnum())
+        return next(c for c in self.name.lower() if c not in used and c.isalpha())
 
     @staticmethod
     def _load_system() -> list["Profile"]:
@@ -106,17 +111,21 @@ def main() -> None:
         root.attributes("-topmost", True)
         root.attributes("-type", "utility")
         root.bind_all("<Escape>", lambda _: root.destroy())
-        root.eval('tk::PlaceWindow . center')
+        root.eval("tk::PlaceWindow . center")
 
-        def opener(profile: Profile):
+        private_state = BooleanVar()
+
+        def opener(profile: Profile, force_private: bool = False):
             root.destroy()
-            profile.open(argv[1:])
+            profile.open(argv[1:], force_private or private_state.get())
 
         for key, profile in profiles.items():
             root.bind_all(key, lambda _, p=profile: opener(p))
+            root.bind_all(key.upper(), lambda _, p=profile: opener(p, True))
             Button(
                 text=f"{profile.name}{' (default)' if profile.default else ''} [{key}]",
                 command=lambda p=profile: opener(p),
                 width=20,
             ).pack(fill="x")
+        Checkbutton(text="Private window", variable=private_state).pack(fill="x")
         root.wait_window()
